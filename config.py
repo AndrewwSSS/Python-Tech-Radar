@@ -7,7 +7,7 @@ SKILLS = [
     "Docker",
     "Linux",
     "Django",
-    "Postrgresql",
+    "PostgreSQL",
     "Artificial Learning",
     "Js",
     "Machine Learning",
@@ -26,12 +26,20 @@ SKILLS = [
     "algorithms",
     "MongoDB",
     "microservice",
-    "Tableau"
+    "Tableau",
+    "Typescript",
+    "ORM",
+    "Git",
+    "GitHub",
+    "Kafka",
+    "RabbitMQ",
+    "SOLID"
 ]
 
-BASE_URL = "https://jobs.dou.ua/vacancies/?category=Python"
+DOU_URL = "https://jobs.dou.ua/vacancies/?category=Python"
+LINKEDIN_URL = "https://www.linkedin.com/jobs/"
 
-EXPERIENCE_GROUPS = [
+DOU_EXPERIENCE_GROUPS = [
     "0-1",
     "1-3",
     "3-5",
