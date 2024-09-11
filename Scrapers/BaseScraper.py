@@ -20,5 +20,3 @@ class ScrapeVacanciesBase(ABC):
         url = getattr(config, self.URL_VARIABLE_NAME, None)
         assert url is not None, f"Add variable {self.URL_VARIABLE_NAME} to config.py"
         return url
-
-

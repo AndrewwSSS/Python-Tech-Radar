@@ -12,6 +12,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from Scrapers.BaseScraper import ScrapeVacanciesBase
 from config import DOU_EXPERIENCE_GROUPS
+from config import DOWNLOAD_GROUPS_COUNT
+from config import DOWNLOAD_GROUPS_DELAY
 from config import SHOW_MORE_BUTTON_CLICK_DELAY
 from config import SKILLS
 from models import Vacancy
@@ -19,6 +21,11 @@ from models import Vacancy
 
 class DouScraper(ScrapeVacanciesBase):
     URL_VARIABLE_NAME = "DOU_URL"
+
+    @staticmethod
+    def split_list(lst, n):
+        k, m = divmod(len(lst), n)
+        return [lst[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n)]
 
     @staticmethod
     async def _parse_vacancy(
@@ -79,12 +86,18 @@ class DouScraper(ScrapeVacanciesBase):
                 url = item.find_element(By.CSS_SELECTOR, ".title > a.vt").get_attribute("href")
                 vacancy_urls.append((url, exp))
 
+        result = []
+
         async with httpx.AsyncClient() as client:
-            result = await asyncio.gather(
-                *[
-                    self._parse_vacancy(client, url, exp)
-                    for url, exp in vacancy_urls
-                ]
-            )
+            for index, group in enumerate(self.split_list(vacancy_urls, DOWNLOAD_GROUPS_COUNT)):
+                group_result = await asyncio.gather(
+                    *[
+                        self._parse_vacancy(client, url, exp)
+                        for url, exp in group
+                    ]
+                )
+                result.extend(group_result)
+                print(f"{index+1} group done")
+                time.sleep(DOWNLOAD_GROUPS_DELAY)
 
         return result
