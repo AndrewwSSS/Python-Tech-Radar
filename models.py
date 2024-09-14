@@ -5,7 +5,7 @@ from dataclasses import dataclass
 @dataclass
 class Vacancy:
     position: str
-    experience: str = None
+    experience: str | None = None
     skills: [str] = None
     salary_min: int | None = None
     salary_max: int | None = None
@@ -27,6 +27,3 @@ class Vacancy:
                     vacancy.salary_max,
                     vacancy.places
                 ])
-        
-
-
